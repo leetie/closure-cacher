@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::str::from_utf8;
 use std::thread;
 use std::time::Duration;
 
@@ -150,11 +149,12 @@ fn main() {
         cacher_3.value(22)
     );
 
+    // we can return a Result<T, E> type as well!
     let mut cacher_3_num_2 = Cacher3::new(|arg: &[u8]| {
         println!("Converting arg: {:?} into &str", arg);
         if let Ok(arg) = std::str::from_utf8(&arg) {
             println!("{}", arg);
-            Ok(())
+            Ok(arg)
         } else {
             Err("cannot parse to str")
         }
@@ -163,6 +163,7 @@ fn main() {
     cacher_3_num_2
         .value("Hello, World!".as_bytes())
         .unwrap_or_else(|err| {
-            println!("Err is {}", err);
+            println!("Err: {}", err);
+            err
         });
 }
